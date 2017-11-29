@@ -2,4 +2,9 @@
 {% block container %}
 <h1>Välkommen</h1>
 <p>Detta är en liten enkel todo-applikation.</p>
+<ul>
+  {% for item in items %}
+    <li>{{item.title}}</li>
+  {% endfor %}
+</ul>
 {% endblock %}

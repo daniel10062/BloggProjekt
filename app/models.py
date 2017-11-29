@@ -9,4 +9,4 @@ class Item(db.Model):
     done = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return '<Item: {}>'.format(self.id)
+        return '<Item: {} - {}>'.format(self.id, self.title)
