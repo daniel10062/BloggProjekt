@@ -2,9 +2,41 @@
 {% block container %}
 <h1>Välkommen</h1>
 <p>Detta är en liten enkel todo-applikation.</p>
+
+<form method="POST" action="/">
+  {{ form.csrf_token }}
+
+  {{ form.title.label }}
+  {{ form.title(class="u-full-width", placeholder="Har du något att lägga till?") }}
+
+  {{ form.description.label }}
+  {{ form.description(class="u-full-width", placeholder="Har du något att lägga till?") }}
+  <div class="twelve columns" id="submit-right">
+    {{ form.submit(class="button-primary") }}
+  </div>
+</form>
+
 <ul>
   {% for item in items %}
-    <li>{{item.title}}</li>
+      <li>
+      <div class="package" id="item-{{item.id}}">
+        <div class="checkbox">
+        <label>
+            <input id="checkbox-{{item.id}}" type="checkbox" name="check" data-item-id="{{item.id}}" {{ 'checked' if item.done }}> Klar?
+        </label>
+        <a href="{{ url_for('main.edit', id=item.id) }}">Ändra</a>
+        </div>
+
+        <h2>{{item.title}}</h2>
+        <h4> {{item.description}} </h4>
+        <h4> {{item.done}} </h4>
+      </div>
+    </li>
   {% endfor %}
-</ul>
+  </ul>
+{% endblock %}
+  </div>
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/checkbox.js') }}"></script>
 {% endblock %}

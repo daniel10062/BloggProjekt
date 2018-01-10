@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block container %}
+<h1>Ändra</h1>
+<form method="POST" action="{{ url_for('main.edit', id=item.id) }}">
+  {{ form.csrf_token }}
+
+  {{ form.title.label }}
+  {{ form.title(class="u-full-width", placeholder="Har du något att lägga till?") }}
+
+  {{ form.description.label }}
+  {{ form.description(class="u-full-width", placeholder="Har du något att ändra på?") }}
+  <div class="twelve columns" id="submit-right">
+    {{ form.submit(class="button-primary") }}
+  </div>
+</form>
+{% endblock %}
