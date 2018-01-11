@@ -2,15 +2,12 @@ from flask import abort, render_template, request, make_response, current_app, j
 from . import main
 from .. import db
 from ..models import Item, User
-from .forms import EditItemForm, NewItemForm, LoginForm
+from .forms import EditItemForm, NewItemForm, LoginForm, RegistrationForm
 from time import *
 from werkzeug.security import generate_password_hash
-from flask_login import current_user, login_user, logout_user
-from app.forms import RegistrationForm
+from flask_login import current_user, login_user, logout_user, login_required
 
 @main.route("/", methods=['GET', 'POST'])
-@main.route("/index", methods=['GET', 'POST'])
-@login_required
 def index():
     """Default application route."""
     form = NewItemForm(title='', description='')
@@ -19,10 +16,8 @@ def index():
                   description=form.description.data)
         db.session.add(it)
         db.session.commit()
-        #return redirect('http://localhost:5000')
         return redirect(url_for('main.index'))
     items = db.session.query(Item).filter_by(done=False).all()
-#   items = db.session.query(Item).all()
     return render_template('index.html', form=form, items=items)
 
 
@@ -65,26 +60,26 @@ def edit(id):
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.login'))
     return render_template('login.html', title='Sign In', form=form)
 
-@app.route('/logout')
+@main.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -92,5 +87,5 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     return render_template('register.html', title='Register', form=form)

@@ -1,7 +1,7 @@
 from wtforms import SubmitField, TextField, TextAreaField, StringField, PasswordField
-from wtforms.validators import Required
+from wtforms.validators import DataRequired, Required, Email, EqualTo
 from flask_wtf import FlaskForm
-
+from .. models import User
 
 class NewItemForm(FlaskForm):
     title = TextField('Något att göra?', validators=[Required()])
