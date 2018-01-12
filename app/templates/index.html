@@ -2,9 +2,23 @@
 {% block container %}
 <h1>Välkommen</h1>
 <p>Detta är en liten enkel todo-applikation.</p>
+
+<form method="POST" action="/">
+  {{ form.csrf_token }}
+
+  {{ form.title.label }}
+  {{ form.title(class="u-full-width", placeholder="Att göra...") }}
+
+  {{ form.description.label }}
+  {{ form.description(class="u-full-width", placeholder="Beskrivning...") }}
+
+    {{ form.submit(class="button-primary") }}
+</form>
+
 <ul>
   {% for item in items %}
-    <li>{{item.title}}</li>
+    <li>{{item.title}}<br>
+    {{item.description}}</li>
   {% endfor %}
 </ul>
 {% endblock %}
