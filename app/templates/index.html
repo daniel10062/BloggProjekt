@@ -17,8 +17,23 @@
 
 <ul>
   {% for item in items %}
-    <li>{{item.title}}<br>
-    {{item.description}}</li>
+    <li id="item-{{item.id}}">
+      <div class="package">
+        <div class="checkbox">
+        <label>
+            <input id="checkbox-{{item.id}}" type="checkbox" name="check" data-item-id="{{item.id}}" {{ 'checked' if item.done }}> Klar?
+        </label>
+        </div>
+
+        <h2>{{item.title}}</h2>
+        <h4> {{item.description}} </h4>
+
+      </div>
+    </li>
   {% endfor %}
 </ul>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/checkbox.js') }}"></script>
 {% endblock %}
