@@ -8,6 +8,8 @@ from werkzeug.security import generate_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
 
 @main.route("/", methods=['GET', 'POST'])
+@main.route('/index', methods=['GET', 'POST'])
+@login_required
 def index():
     """Default application route."""
     form = NewItemForm(title='', description='')
