@@ -3,20 +3,30 @@ from wtforms.validators import DataRequired, Required, Email, EqualTo
 from flask_wtf import FlaskForm
 from .. models import User
 
+
+class AddItemForm(FlaskForm):
+    title = TextField('Titel...', validators=[Required()])
+    description = TextAreaField('Att göra...', validators=[Required()])
+    submit = SubmitField('Lägg till')
+
+
 class NewItemForm(FlaskForm):
     title = TextField('Något att göra?', validators=[Required()])
     description = TextAreaField('Beskriv saken!', validators=[Required()])
     submit = SubmitField('Lägg till')
+
 
 class EditItemForm(FlaskForm):
     title = TextField('Något att göra?', validators=[Required()])
     description = TextAreaField('Beskriv saken!', validators=[Required()])
     submit = SubmitField('Ändra')
 
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[Required()])
     password = PasswordField('Password', validators=[Required()])
     submit = SubmitField('Login')
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
