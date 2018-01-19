@@ -1,4 +1,4 @@
-from flask import abort, render_template, request, make_response, current_app, jsonify, Flask, redirect, url_for
+from flask import abort, render_template, request, make_response, current_app, jsonify, Flask, redirect, url_for, flash
 from . import main
 from .. import db
 from ..models import Item, User
@@ -7,11 +7,13 @@ from time import *
 from werkzeug.security import generate_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
 
+
 @main.route("/", methods=['GET', 'POST'])
 @login_required
 def index():
     """Default application route."""
     form = NewItemForm(title='', description='')
+
     if form.validate_on_submit():
         it = Item(title=form.title.data,
                   description=form.description.data)
@@ -60,10 +62,14 @@ def edit(id):
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
+    current_app.logger.debug('current_user: {}'.format(current_user))
     if current_user.is_authenticated:
+
         return redirect(url_for('main.index'))
+
     form = LoginForm()
     if form.validate_on_submit():
+        current_app.logger.info('Attempting login of user {}'.format(form.username.data))
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
