@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div>
+      Meny:
+      <a href="{{ url_for('main.index') }}">Home</a>
+      {% if current_user.is_anonymous %}
+      <a href="{{ url_for('main.login') }}">Login</a>
+      {% else %}
+      <a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
+      <a href="{{ url_for('main.logout') }}">Logout</a>
+      {% endif %}
+  </div>
+  <h1> Här kan du ändra din profil, {{ user.username }}. </h1>
+        {% if user.about_me %}<strong><p>{{ user.about_me }}</p></strong>{% endif %}
+        {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
+        <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+        {% if user == current_user %}
+        <p><a href="{{ url_for('main.edit_profile') }}">Edit your profile</a></p>
+        {% elif not current_user.is_following(user) %}
+        <p><a href="{{ url_for('follow', username=user.username) }}">Follow</a></p>
+        {% else %}
+        <p><a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a></p>
+        {% endif %}
+
+    <strong><h4> Dina posts </h4></strong>
+    {% for post in posts %}
+    <p>
+    {{ post.author.username }} says: <b>{{ post.body }}</b>
+    </p>
+    {% endfor %}
+{% endblock %}

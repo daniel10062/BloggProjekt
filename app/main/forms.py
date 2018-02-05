@@ -1,5 +1,5 @@
-from wtforms import SubmitField, TextField, TextAreaField, StringField, PasswordField
-from wtforms.validators import DataRequired, Required, Email, EqualTo
+from wtforms import SubmitField, TextField, TextAreaField, StringField, PasswordField, BooleanField
+from wtforms.validators import DataRequired, Required, Email, EqualTo, Length
 from flask_wtf import FlaskForm
 from .. models import User
 
@@ -15,6 +15,10 @@ class NewItemForm(FlaskForm):
     description = TextAreaField('Beskriv saken!', validators=[Required()])
     submit = SubmitField('Lägg till')
 
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
+    submit = SubmitField('Submit')
 
 class EditItemForm(FlaskForm):
     title = TextField('Något att göra?', validators=[Required()])
@@ -26,7 +30,7 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[Required()])
     password = PasswordField('Password', validators=[Required()])
     submit = SubmitField('Login')
-
+    remember_me = BooleanField('Remember me!')
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

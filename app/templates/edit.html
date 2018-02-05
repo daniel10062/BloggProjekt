@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block container %}
-<h1>Ändra</h1>
+<div>
+      Meny:
+      <a href="{{ url_for('main.index') }}">Home</a>
+      {% if current_user.is_anonymous %}
+      <a href="{{ url_for('main.login') }}">Login</a>
+      {% else %}
+      <a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
+      <a href="{{ url_for('main.logout') }}">Logout</a>
+      {% endif %}
+  </div>
+<h1>Ändra dina inlägg --></h1>
 <form method="POST" action="{{ url_for('main.edit', id=item.id) }}">
   {{ form.csrf_token }}
 
