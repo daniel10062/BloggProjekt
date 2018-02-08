@@ -4,8 +4,8 @@ var all_checkbox = document.getElementsByClassName("checkbox");
 for (checkbox of all_checkbox) {
 /*  console.log(tile); */
   checkbox.addEventListener("click", function( event ){
-    console.log('Clicking on #' + event.target.dataset.itemId);
-    var checkbox_value = document.getElementById("checkbox-" + event.target.dataset.itemId);
+    console.log('Clicking on #' + event.target.dataset.postId);
+    var checkbox_value = document.getElementById("checkbox-" + event.target.dataset.postId);
     console.log(checkbox_value.checked);
     var url = '/update';
 
@@ -26,7 +26,7 @@ for (checkbox of all_checkbox) {
         if (checkbox_value.checked === true) {
           responseData = JSON.parse(request.responseText);
           if (responseData.status == 'ok') {
-            document.getElementById('item-' + responseData.itemId).remove();
+            document.getElementById('post-' + responseData.postId).remove();
           }
         }
       } else {
@@ -39,7 +39,7 @@ for (checkbox of all_checkbox) {
       // There was a connection error of some sort
     };
 
-    request.send(JSON.stringify({itemId: event.target.dataset.itemId}));
+    request.send(JSON.stringify({postId: event.target.dataset.postId}));
     /* request.send(JSON.stringify({itemDone: checkbox_value.checked}));
     */
   }, false);

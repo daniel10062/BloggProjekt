@@ -3,18 +3,6 @@ from wtforms.validators import DataRequired, Required, Email, EqualTo, Length
 from flask_wtf import FlaskForm
 from .. models import User
 
-
-class AddItemForm(FlaskForm):
-    title = TextField('Titel...', validators=[Required()])
-    description = TextAreaField('Att göra...', validators=[Required()])
-    submit = SubmitField('Lägg till')
-
-
-class NewItemForm(FlaskForm):
-    title = TextField('Något att göra?', validators=[Required()])
-    description = TextAreaField('Beskriv saken!', validators=[Required()])
-    submit = SubmitField('Lägg till')
-
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
@@ -31,6 +19,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[Required()])
     submit = SubmitField('Login')
     remember_me = BooleanField('Remember me!')
+
+class PostForm(FlaskForm):
+    post = TextAreaField('Say something', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
