@@ -1,4 +1,5 @@
 from . import db, login
+from flask import current_app
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
 from datetime import datetime
@@ -47,6 +48,22 @@ class User(db.Model, UserMixin):
 
     def password_check(self, password):
         return check_password_hash(self.password_hash, password)
+
+    # @property
+    # def password(self):
+    #     raise ValueError('Can not read passwords.')
+    #
+    # @property.setter
+    # def password(self, value):
+    #     self.password_hash = generate_password_hash(value)
+
+    @property
+    def is_admin(self):
+        return current_app.config['ADMIN_EMAIL'] == self.email
+
+    @is_admin.setter
+    def is_admin(self, value):
+        raise ValueError('is_admin not settable.')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

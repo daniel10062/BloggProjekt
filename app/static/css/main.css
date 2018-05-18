@@ -9,24 +9,52 @@
 
 .package {
   display: inline-block;
-  margin-right: 2em;
   width: 200px;
   border: 1px solid black;
   margin-bottom: 1px;
-  animation-name: slightly_move;
-  animation-duration: 1s;
+  background-color: lightgrey;
 }
 
-.close{
-
+.navigationbar {
+  display: flex;
+  justify-content: end;
+  background-color: #1F2D3D;
+  overflow: hidden;
 }
+
+.usercounter a {
+  display: flex;
+  float: left;
+  display: flex;
+  justify-content: end;
+  background-color: #1F2D3D;
+  overflow: hidden;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navigationbar a {
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
 li {
   list-style-type: none;
   margin-bottom: 0px;
 }
 
-/*@keyframes slightly_move {
-    0% {transform: translateY(-5px)}
-    50% {transform: translateY(5px)}
-    100% {transform: translateY(0px)}
-}*/
+input[type="submit"] {
+  background-color: grey;
+}
+
+#space_invaders {
+  width: 800px;
+  height: 500px;
+  overflow: hidden;
+}

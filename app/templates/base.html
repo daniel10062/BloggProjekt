@@ -3,7 +3,7 @@
 <head>
   {%- block head %}
   <meta charset="utf-8">
-  <title>{% block title %}TODO{% endblock %}</title>
+  <title>{% block title %}Blogg forum{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
@@ -11,7 +11,32 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   {% endblock -%}
 </head>
-<body>
+<body background="{{ url_for('static', filename='Pictures/TestBackground.jpg') }}">
+<div class="usercounter">
+  <a> Users: {{ count }} </a>
+</div>
+
+<div class="navigationbar">
+      <a href="{{ url_for('main.index') }}">Home</a>
+      {% if current_user.is_anonymous %}
+
+      <a href="{{ url_for('main.login') }}">Login</a>
+      <a href="{{ url_for('main.register') }}">Register</a>
+      {% elif current_user.is_admin %}
+
+      <a href="{{ url_for('main.act_users') }}"> Active users</a>
+      <a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
+      <a href="{{ url_for('main.logout') }}">Logout</a>
+      <a>Logged in as ADMIN!</a>
+
+      {% else %}
+      <a href="{{ url_for('main.join') }}">Chat room</a>
+      <a href="{{ url_for('main.explore') }}">Explore</a>
+      <a href="{{ url_for('main.space_invaders') }}">Space Invaders</a>
+      <a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
+      <a href="{{ url_for('main.logout') }}">Logout</a>
+      {% endif %}
+  </div>
 <div class="container">
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -23,7 +48,10 @@
     {% endif %}
   {% endwith %}
 {% block container %}{% endblock %}
-{% block script %}{% endblock %}
+{% block script %}
+  {{ moment.include_jquery() }}
+  {{ moment.include_moment() }}
+{% endblock %}
 </div>
 </body>
 </html>

@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/spaceinvaders.css') }}">
+  </head>
+  <body>
+    <div class="menuimage" id="backgroundimage">
+      <img src="{{ url_for('static', filename='Pictures/Menu.png') }}" alt="Shady moon" id="Menuimg" left="0px" width="800px" height="500px">
+    </div>
+
+    <div class="Gameover" id="gameover">
+      <img src="{{ url_for('static', filename='Pictures/gameover.jpg') }}" alt="gameover" id="gameoverimg" left="0px" width="800px" height="500px">
+    </div>
+
+    <div class="Highscore" id="highscore">
+      <img src="{{ url_for('static', filename='Pictures/highscore.jpg') }}" alt="highscore picture" id="highscoreimg" width="800px" height="500px">
+    </div>
+
+    <div class="Pausescreen" id="Pausescreen">
+      <img src="{{ url_for('static', filename='Pictures/SpaceInvadersBakgrundF_pause.jpg') }}" alt="pausepic" id="Pausescreenimg" width="800px" height="500px">
+    </div>
+
+      <style> body {padding: 0; margin: 0;} </style>
+      <script src="{{ url_for('static', filename='SpInv_javascript/p5/p5.js') }}"></script>
+      <script src="{{ url_for('static', filename='SpInv_javascript/p5/addons/p5.dom.js') }}"></script>
+      <script src="{{ url_for('static', filename='SpInv_javascript/p5/addons/p5.sound.js') }}"></script>
+      <script src="{{ url_for('static', filename='SpInv_javascript/sketch.js') }}"></script>
+
+  </body>
+</html>

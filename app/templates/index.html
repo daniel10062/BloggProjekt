@@ -1,49 +1,41 @@
 {% extends "base.html" %}
 {% block container %}
-<div>
-      Meny:
-      <a href="{{ url_for('main.index') }}">Home</a>
-      {% if current_user.is_anonymous %}
-      <a href="{{ url_for('main.login') }}">Login</a>
-      {% else %}
-      <a href="{{ url_for('main.explore') }}">Explore</a>
-      <a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
-      <a href="{{ url_for('main.logout') }}">Logout</a>
-      {% endif %}
-  </div>
-<h1>Välkommen {{ current_user.username }}</h1>
+<h1>Välkommen Användare: {{ current_user.username }}</h1>
 <form method="POST" action="/">
-  <h1>Hi, {{ current_user.username }}!</h1>
    {% if form %}
    <form action="" method="post">
        {{ form.hidden_tag() }}
        <p>
-           {{ form.post.label }}<br>
-           {{ form.post(cols=32, rows=4) }}<br>
+           <h4>{{ form.post.label }}</h4><br>
+           {{ form.post(cols=32, rows=4, placeholder="Skriv ett inlägg..") }}<br>
            {% for error in form.post.errors %}
            <span style="color: red;">[{{ error }}]</span>
            {% endfor %}
        </p>
+       <div class="submitbox">
        <p>{{ form.submit() }}</p>
+     </div>
    </form>
    {% endif %}
    {% for post in posts %}
-    {% if current_user.username %}
-    <li id="post-{{post.id}}">
-      <div class="package">
-        <div class="checkbox">
-          <label>
-            <input id="checkbox-{{post.id}}" type="checkbox" name="check" data-item-id="{{post.id}}" {{ 'checked' if post.done }}> Ta bort? </input>
-            {% include '_post.html' %}
-          </label>
+    {% if post.author.username == current_user.username %}
+      <li id="post-{{post.id}}">
+        <div class="package">
+          <div class="checkbox">
+            <label>
+              <input id="checkbox-{{post.id}}" type="checkbox" name="check" data-post-id="{{post.id}}" {{ 'checked' if post.done }}> Delete? </input>
+              {% include '_post.html' %}
+            </label>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
     {% else %}
+      <div class="package">
       {% include '_post.html' %}
+    </div>
     {% endif %}
+  {% endfor %}
 
-   {% endfor %}
    {% if prev_url %}
    <a href="{{ prev_url }}">Newer posts</a>
    {% endif %}
@@ -54,5 +46,6 @@
 {% endblock %}
 
 {% block script %}
-<script src="{{ url_for('static', filename='js/checkbox.js') }}"></script>
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/checkbox.js') }}"></script>
 {% endblock %}

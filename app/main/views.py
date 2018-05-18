@@ -1,12 +1,15 @@
-from flask import abort, render_template, request, make_response, current_app, jsonify, Flask, redirect, url_for, flash
+from flask import abort, render_template, request, make_response, current_app, jsonify, Flask, redirect, url_for, flash, session
 from . import main
 from .. import db
 from ..models import User, Post
-from .forms import EditItemForm, LoginForm, RegistrationForm, EditProfileForm, PostForm
+from .forms import EditItemForm, LoginForm, RegistrationForm, EditProfileForm, PostForm, ChatForm
 from werkzeug.security import generate_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
 from datetime import datetime
+from sqlalchemy import or_, and_, MetaData
+from datetime import datetime
 
+meta = MetaData()
 POSTS_PER_PAGE = 25
 
 @main.before_request
@@ -54,9 +57,11 @@ next_url=next_url, prev_url=prev_url)
 def update():
     """Update item state."""
     json = request.get_json()
+    post_to_delete = db.session.query(Post).filter_by(done=False).first()
     post = db.session.query(Post).filter_by(id=json['postId']).first()
     if post:
         post.done = not post.done
+        db.session.delete(post_to_delete)
         db.session.commit()
         return jsonify({'status': 'ok', 'postId': post.id})
     return jsonify({'status': 'error'}), 400  # Return with status 400
@@ -110,6 +115,8 @@ def login():
     current_app.logger.debug('current_user: {}'.format(current_user))
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
+    a  = len(db.session.query(User).filter_by(username=User.username).all())
+    current_app.logger.info(db.session.query(User).filter_by(username=User.username).all())
     form = LoginForm()
     if form.validate_on_submit():
         current_app.logger.info('Attempting login of user {}'.format(form.username.data))
@@ -119,7 +126,7 @@ def login():
             return redirect(url_for('main.login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('main.login'))
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, count=a)
 
 @main.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -136,7 +143,6 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
-
 
 @main.route('/logout')
 def logout():
@@ -156,3 +162,47 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('main.login'))
     return render_template('register.html', title='Register', form=form)
+
+@login_required
+@main.route('/spaceinvaders_iframe')
+def space_invaders_iframe():
+    return render_template('space_invaders_iframe.html')
+
+@login_required
+@main.route('/spaceinvaders')
+def space_invaders():
+    return render_template('space_invaders.html', title="Space Invaders")
+
+#ADMIN FUNCTIONS
+
+@login_required
+@main.route('/act_users')
+def act_users():
+    users = User.query.all()
+    return render_template('active_users.html', users=users, title="Active users")
+
+#chat room
+@login_required
+@main.route('/join', methods=['GET', 'POST'])
+def join():
+    """Login form to enter a room."""
+    form = ChatForm()
+    if form.validate_on_submit():
+        session['name'] = form.name.data
+        session['room'] = form.room.data
+        return redirect(url_for('main.chat'))
+    elif request.method == 'GET':
+        form.name.data = session.get('name', '')
+        form.room.data = session.get('room', '')
+    return render_template('join_room.html', form=form)
+
+@login_required
+@main.route('/chat')
+def chat():
+    """Chat room. The user's name and room must be stored in
+    the session."""
+    name = session.get('name', '')
+    room = session.get('room', '')
+    if name == '' or room == '':
+        return redirect(url_for('main.index'))
+    return render_template('chat.html', name=name, room=room)

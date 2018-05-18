@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block container %}
+<h1>Here you can find all the users registered on the database --</h1>
+
+{% for user in users %}
+  {% if not user == current_user %}
+    <label>
+      {% include '_users.html' %}
+    </label>
+  {%endif%}
+{% endfor %}
+
+{% endblock %}

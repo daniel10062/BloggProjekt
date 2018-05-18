@@ -13,6 +13,11 @@ class EditItemForm(FlaskForm):
     description = TextAreaField('Beskriv saken!', validators=[Required()])
     submit = SubmitField('Ändra')
 
+class ChatForm(FlaskForm):
+    """Accepts a nickname and a room."""
+    name = StringField('Name', validators=[Required()])
+    room = StringField('Room', validators=[Required()])
+    submit = SubmitField('Enter Chatroom')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[Required()])
@@ -21,8 +26,8 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me!')
 
 class PostForm(FlaskForm):
-    post = TextAreaField('Say something', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+    post = TextAreaField('Gör ett inlägg!', validators=[DataRequired()])
+    submit = SubmitField('Lägg till')
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

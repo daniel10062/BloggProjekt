@@ -1,20 +1,10 @@
 {% extends "base.html" %}
 
 {% block container %}
-<div>
-      Meny:
-      <a href="{{ url_for('main.index') }}">Home</a>
-      {% if current_user.is_anonymous %}
-      <a href="{{ url_for('main.login') }}">Login</a>
-      {% else %}
-      <a href="{{ url_for('main.explore')}}">Explore</a>
-      <a href="{{ url_for('main.logout') }}">Logout</a>
-      {% endif %}
-  </div>
   {% if user.username == current_user.username %}
     <h1> Välkommen till din profil, {{ user.username }}. </h1>
   {% else %}
-    <h1> Välkommen till {{user.username}} profil. </h1>
+    <h1> Välkommen till {{user.username}}s profil. </h1>
   {% endif %}
         {% if user.about_me %}<strong><p>{{ user.about_me }}</p></strong>{% endif %}
         {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
@@ -25,12 +15,41 @@
         <p><a href="{{ url_for('main.follow', username=user.username) }}">Follow</a></p>
         {% else %}
         <p><a href="{{ url_for('main.unfollow', username=user.username) }}">Unfollow</a></p>
+        <p><a href="{{ url_for('main.space_invaders')}}">Space Invaders</a></p>
         {% endif %}
 
-    <strong><h4> Dina posts </h4></strong>
-    {% for post in posts %}
-    <p>
-    {{ post.author.username }} says: <b>{{ post.body }}</b>
-    </p>
-    {% endfor %}
+    {% if user.username == current_user.username %}
+      <strong><h4> Dina posts </h4></strong>
+      {% for post in posts %}
+      <p>
+      {{ post.author.username }} says: <b>{{ post.body }}</b>
+      </p>
+      {% endfor %}
+    {% elif current_user.username == 'admin' %}
+      <strong><h2> {{user.username}}:s posts you can delete them if you want </strong></h2>
+      {% for post in posts %}
+       <li id="post-{{post.id}}">
+         <div class="package">
+           <div class="checkbox">
+             <label>
+               <input id="checkbox-{{post.id}}" type="checkbox" name="check" data-post-id="{{post.id}}" {{ 'checked' if post.done }}> Delete? </input>
+               {% include '_post.html' %}
+             </label>
+           </div>
+         </div>
+       </li>
+     {% endfor %}
+    {% else %}
+      <strong><h4> Här kan du se {{user.username}}s inlägg </strong></h4>
+      {% for post in posts %}
+      <p>
+      {{ post.author.username }} says: <b>{{ post.body }}</b>
+      </p>
+      {% endfor %}
+    {%endif%}
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/checkbox.js') }}"></script>
 {% endblock %}

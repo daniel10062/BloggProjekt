@@ -1,5 +1,5 @@
 <table>
         <tr valign="top">
-            <td><a href="{{ url_for('main.user', username=post.author.username) }}">{{ post.author.username }}</a> says:<br><strong>{{ post.body }}</strong></td>
+            <td><a href="{{ url_for('main.user', username=post.author.username) }}">{{ post.author.username }}</a> says {{ moment(post.timestamp).fromNow(refresh=True) }}:<br><strong>{{ post.body }}</strong></td>
         </tr>
 </table>

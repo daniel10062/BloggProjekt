@@ -3,6 +3,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config():
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL') or 'admin@example.com'
+
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'very hard to guess string'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
